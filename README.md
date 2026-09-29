@@ -468,7 +468,3 @@ Where:
 - `height` → number
 
 ---
-
-## 👋 That's It
-
-This project intentionally keeps the implementation simple and focused on the basic CRUD flow, API integration, validation, and error handling using FastAPI.
