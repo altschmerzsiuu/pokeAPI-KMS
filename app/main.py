@@ -1,5 +1,4 @@
-from fastapi import FastAPI
-from fastapi import HTTPException
+from fastapi import FastAPI, HTTPException
 from pydantic import BaseModel
 import requests
 
@@ -18,10 +17,30 @@ class CreatePokemon(BaseModel):
     weight: float
     height: float
 
-@app.get("/pokemon/{name}")
-def read(name):
+@app.get("/pokemon/all/{name}")
+def read_pokemon(name: str):
     url = f"https://pokeapi.co/api/v2/pokemon/{name}"
     response = requests.get(url)
+    if response.status_code == 404:
+        raise HTTPException(
+            status_code=404,
+            detail="Data Tidak Ditemukan!"
+            )
+    data = response.json()
+    return data
+
+@app.get("/pokemon/{name}")
+def read_pokemon(name: str):
+    url = f"https://pokeapi.co/api/v2/pokemon/{name.lower()}"
+
+    try:
+        response = requests.get(url, timeout=5)
+    except requests.exceptions.RequestException:
+        raise HTTPException(
+            status_code=502,
+            detail="PokeAPI ga bisa dihubungi"
+        )
+
     if response.status_code == 404:
         raise HTTPException(
             status_code=404,
@@ -29,12 +48,17 @@ def read(name):
         )
 
     data = response.json()
-    return data
+    return {
+        "id" : data["id"],
+        "name" : data["name"],
+        "height" : data["height"],
+        "weight" : data["weight"],
+    }
 
-@app.get("/pokemon/id/{id}")
-def read_onedata(id: int):
+@app.get("/pokemon/id/{pokemon_id}")
+def read_pokemon_by_id(pokemon_id: int):
     for pokemon in pokemon_data:
-        if pokemon.id == id:
+        if pokemon.id == pokemon_id:
             return pokemon
 
     raise HTTPException(
@@ -43,30 +67,30 @@ def read_onedata(id: int):
     )
 
 @app.get("/pokemon")
-def read_all():
+def read_all_pokemon():
     return pokemon_data
 
 @app.post("/pokemon")
-def create(pokemon: CreatePokemon):
+def create_pokemon(pokemon: CreatePokemon):
     if not pokemon_data:
         newId = 1
     else: 
         newId = max(pokemon.id for pokemon in pokemon_data) + 1
 
-    pokemonBaru = Pokemon(
+    newPokemon = Pokemon(
         id = newId,
         name = pokemon.name,
         height = pokemon.height,
         weight = pokemon.weight
     )
 
-    pokemon_data.append(pokemonBaru)
-    return pokemonBaru
+    pokemon_data.append(newPokemon)
+    return newPokemon
 
-@app.put("/pokemon/id/{id}")
-def updatePokemon(id: int, pokemon: CreatePokemon):
+@app.put("/pokemon/id/{pokemon_id}")
+def update_pokemon(pokemon_id: int, pokemon: CreatePokemon):
     for idPoke in pokemon_data:
-        if idPoke.id == id:
+        if idPoke.id == pokemon_id:
             idPoke.name = pokemon.name
             idPoke.weight = pokemon.weight
             idPoke.height = pokemon.height
@@ -77,10 +101,10 @@ def updatePokemon(id: int, pokemon: CreatePokemon):
         detail="Maaf lagi nie, Data tidak ditemukan!"
     )
 
-@app.delete("/pokemon/id/{id}")
-def deletePokemon(id:int):
+@app.delete("/pokemon/id/{pokemon_id}")
+def delete_pokemon(pokemon_id:int):
     for idPoke in pokemon_data:
-        if idPoke.id == id:
+        if idPoke.id == pokemon_id:
             pokemon_data.remove(idPoke)
             return idPoke
 
