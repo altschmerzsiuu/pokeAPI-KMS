@@ -6,7 +6,7 @@ This project was made as a simple API exercise using a framework that I am famil
 
 ---
 
-## 🚀 Quick Access
+## Quick Access
 
 If you want to try the API directly without running the project locally, you can open the interactive Swagger documentation below:
 
@@ -23,7 +23,7 @@ http://localhost:8000/docs
 
 ---
 
-## 🧰 Tech Stack
+## Tech Stack
 
 - **Language:** Python
 - **Framework:** FastAPI
@@ -34,7 +34,7 @@ http://localhost:8000/docs
 
 ---
 
-## 📖 What This API Does
+## What This API Does
 
 This API has two main parts:
 
@@ -65,7 +65,7 @@ The available operations are:
 
 ---
 
-## 🔌 API Endpoints
+## API Endpoints
 
 ### 1. Get Pokémon from PokéAPI
 
@@ -268,7 +268,7 @@ After deletion, the Pokémon will no longer appear in `GET /pokemon` or `GET /po
 
 ---
 
-## 🧪 Trying the API with Swagger
+## Trying the API with Swagger
 
 The easiest way to test the API is through FastAPI's built-in Swagger UI.
 
@@ -296,7 +296,7 @@ From Swagger, you can:
 
 ---
 
-## 🔄 Simple CRUD Flow
+## Simple CRUD Flow
 
 A simple way to test the CRUD flow is:
 
@@ -356,7 +356,7 @@ The last request should return `404 Not Found` because the Pokémon has already 
 
 ---
 
-## 🛠️ How to Run the Project
+## How to Run the Project
 
 ### 1. Clone the repository
 
@@ -409,7 +409,7 @@ http://localhost:8000/docs
 
 ---
 
-## 📁 Project Structure
+## Project Structure
 
 ```
 pokeAPI-KMS/
@@ -427,7 +427,7 @@ pokeAPI-KMS/
 
 ---
 
-## 📝 Notes
+## Notes
 
 - PokéAPI is used as an external data source for Pokémon lookup.
 - The local CRUD operations use an in-memory Python list.
@@ -437,7 +437,7 @@ pokeAPI-KMS/
 
 ---
 
-## 📌 Error Handling
+## Error Handling
 
 The API currently handles common cases such as:
 
